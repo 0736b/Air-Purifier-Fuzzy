@@ -28,10 +28,10 @@ def aqi_good(air: float) -> float:
     return trimf(air, [1,30,60])
 # Moderate
 def aqi_moderate(air: float) -> float:
-    return trimf(air, [35,50,100])
+    return trimf(air, [35,60,100])
 # Unhealthy for Sensitive Groups
 def aqi_unhealthy_sensitive(air: float) -> float:
-    return trimf(air, [75,100,150])
+    return trimf(air, [75,110,150])
 # Unhealthy
 def aqi_unhealthy(air: float) -> float:
     return trimf(air, [100, 150, 200])
