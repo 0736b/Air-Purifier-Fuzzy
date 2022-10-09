@@ -79,17 +79,17 @@ def union_graph_alphacut(low_alpha, medium_alpha, high_alpha):
         if mem_val <= low_alpha:
             act_low_g[x] = mem_val
         else:
-            act_low_g[x] = 0.0
+            act_low_g[x] = low_alpha
     for x, mem_val in output_medium_g.items():
         if mem_val <= medium_alpha:
             act_medium_g[x] = mem_val
         else:
-            act_medium_g[x] = 0.0
+            act_medium_g[x] = medium_alpha
     for x, mem_val in output_high_g.items():
         if mem_val <= high_alpha:
             act_high_g[x] = mem_val
         else:
-            act_high_g[x] = 0.0
+            act_high_g[x] = high_alpha
     # union output graph
     for i in range (0,101,1):
         output_graph[i] = np.fmax(act_low_g.get(i), (np.fmax(act_medium_g.get(i), act_high_g.get(i))))
@@ -101,4 +101,4 @@ def inference(fc_aqi: dict, fc_flowrate: dict) -> list[float]:
     output_low_alphacut, output_medium_alphacut, output_high_alphacut = alphacut_for_output(alpha_from_inputs)
     output_graph = union_graph_alphacut(output_low_alphacut, output_medium_alphacut, output_high_alphacut)
     output_val = centroid(output_graph)
-    return output_val
+    return output_val, output_graph

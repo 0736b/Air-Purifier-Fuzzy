@@ -1,12 +1,23 @@
 from fuzzy.fuzzifier import fuzzification
 from fuzzy.inference import inference
+from dataclasses import dataclass
 
 class AirPurifier_Mamdani:
     '''Mamdani'''
+    
+    @dataclass
+    class Result:
+        output_graph: dict
+        crisp_value_output: float
+        
+        def __init__(self):
+            self.output_graph = {}
+            self.crisp_value_output = 0.0
+    
     def __init__ (self, aqi: float, flowrate: float):
         self.aqi = aqi
         self.flowrate = flowrate
-        self.crisp_value_output = 0
+        self.result = self.Result()
     
     def set_input(self, new_aqi: float, new_flowrate: float):
         self.aqi = new_aqi
@@ -17,4 +28,5 @@ class AirPurifier_Mamdani:
         
     def run(self):
         self.fuzzificated_aqi, self.fuzzificated_flowrate = fuzzification(self.aqi, self.flowrate)
-        self.crisp_value_output = inference(self.fuzzificated_aqi, self.fuzzificated_flowrate)
+        self.result.crisp_value_output, self.result.output_graph = inference(self.fuzzificated_aqi, self.fuzzificated_flowrate)
+        return self.result

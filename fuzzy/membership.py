@@ -3,8 +3,8 @@ import warnings
 warnings.filterwarnings("ignore")
 
 '''universe'''
-x_aqi = np.arange(0,500,1)
-x_flowrate = np.arange(12,60,1)
+x_aqi = np.arange(0,501,1)
+x_flowrate = np.arange(0,61,1)
 x_fanspeed = np.arange(0,101,1)
 
 def trapmf(x: float, params: list[int]) -> float:
@@ -25,10 +25,10 @@ def trimf(x: float, params: list[int]) -> float:
 '''Input 1 : Air Quality Index Membership'''
 # Good
 def aqi_good(air: float) -> float:
-    return trimf(air, [1,30,60])
+    return trimf(air, [0,30,60])
 # Moderate
 def aqi_moderate(air: float) -> float:
-    return trimf(air, [35,60,100])
+    return trimf(air, [35,65,100])
 # Unhealthy for Sensitive Groups
 def aqi_unhealthy_sensitive(air: float) -> float:
     return trimf(air, [75,110,150])
@@ -37,7 +37,7 @@ def aqi_unhealthy(air: float) -> float:
     return trimf(air, [100, 150, 200])
 # Very Unhealthy
 def aqi_very_unhealthy(air: float) -> float:
-    return trimf(air, [150, 200, 300])
+    return trimf(air, [150, 225, 300])
 # Hazardous
 def aqi_hazardous(air: float) -> float:
     return trimf(air, [200, 325, 500])
@@ -45,10 +45,10 @@ def aqi_hazardous(air: float) -> float:
 '''Input 2 : Air Filter flow-rate Membership'''
 # Low
 def filter_low(flowrate: float) -> float:
-    return trimf(flowrate, [12,24,36])
+    return trimf(flowrate, [0,15,36])
 # Medium
 def filter_medium(flowrate: float) -> float:
-    return trimf(flowrate, [24,36,48])
+    return trimf(flowrate, [20,36,48])
 # High
 def filter_high(flowrate: float) -> float:
     return trimf(flowrate, [36,48,60])
