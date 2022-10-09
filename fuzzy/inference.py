@@ -1,5 +1,6 @@
 import numpy as np
-from fuzzy.defuzzifier import gen_output_membership, centroid
+from fuzzy.defuzzifier import centroid
+from fuzzy.fuzzifier import gen_output_membership
 
 '''
 DEFINE RULES
@@ -23,11 +24,12 @@ DEFINE RULES
 18 - if AQI is HAZARDOUS and FILTER is HIGH then FAN is HIGH
 '''
 
-FAN_LOW = [1,2,3,5,6]
-FAN_MEDIUM = [4,7,8,9,11,12,15]
-FAN_HIGH = [10,13,14,16,17,18]
+FAN_LOW = [1,2,3,5,6]               # Numbers of rule that output FAN is LOW
+FAN_MEDIUM = [4,7,8,9,11,12,15]     # Numbers of rule that output FAN is MEDIUM
+FAN_HIGH = [10,13,14,16,17,18]      # Numbers of rule that output FAN is HIGH
 
 def find_alphacut_from_inputs(fc_aqi: dict, fc_flowrate: dict):
+    '''evaluate all rules from inputs'''
     rules_alphacut = {}
     rules_alphacut['1'] = np.fmin(fc_aqi['GOOD'], fc_flowrate['LOW'])
     rules_alphacut['2'] = np.fmin(fc_aqi['GOOD'], fc_flowrate['MEDIUM'])
@@ -50,19 +52,23 @@ def find_alphacut_from_inputs(fc_aqi: dict, fc_flowrate: dict):
     return rules_alphacut
 
 def alphacut_for_output(rules):
+    '''find alphacut from union graph in same Output fuzzy set'''
     low_alpha = float('-inf')
     med_alpha = float('-inf')
     high_alpha = float('-inf')
+    # union ( max(alphacut from all rules that output FAN is LOW ) )
     for low in FAN_LOW:
         low_alpha = np.fmax(rules[str(low)], low_alpha)
+    # union ( max(alphacut from all rules that output FAN is MEDIUM ) )
     for med in FAN_MEDIUM:
         med_alpha = np.fmax(rules[str(med)], med_alpha)
+    # union ( max(alphacut from all rules that output FAN is HIGH ) )
     for high in FAN_HIGH:
         high_alpha = np.fmax(rules[str(high)], high_alpha)
     return low_alpha, med_alpha, high_alpha
         
 def union_graph_alphacut(low_alpha, medium_alpha, high_alpha):
-    # print(high_alpha)
+    '''union output graph from all rules'''
     output_graph = {}
     output_low_g, output_medium_g, output_high_g = gen_output_membership()
     # active alphacut on graph
@@ -90,9 +96,9 @@ def union_graph_alphacut(low_alpha, medium_alpha, high_alpha):
     return output_graph
         
 def inference(fc_aqi: dict, fc_flowrate: dict) -> list[float]:
+    '''fuzzy inference'''
     alpha_from_inputs = find_alphacut_from_inputs(fc_aqi, fc_flowrate)
     output_low_alphacut, output_medium_alphacut, output_high_alphacut = alphacut_for_output(alpha_from_inputs)
     output_graph = union_graph_alphacut(output_low_alphacut, output_medium_alphacut, output_high_alphacut)
     output_val = centroid(output_graph)
     return output_val
-    

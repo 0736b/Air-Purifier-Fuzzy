@@ -22,7 +22,7 @@ def trimf(x: float, params: list[int]) -> float:
     c = params[2]
     return max(min(((x-a) / (b-a)), ((c-x) / (c-b))), 0)    
 
-# Input 1 : Air Quality Index Membership
+'''Input 1 : Air Quality Index Membership'''
 # Good
 def aqi_good(air: float) -> float:
     return trimf(air, [1,30,60])
@@ -42,7 +42,7 @@ def aqi_very_unhealthy(air: float) -> float:
 def aqi_hazardous(air: float) -> float:
     return trimf(air, [200, 325, 500])
 
-# Input 2 : Air Filter flow-rate Membership
+'''Input 2 : Air Filter flow-rate Membership'''
 # Low
 def filter_low(flowrate: float) -> float:
     return trimf(flowrate, [12,24,36])
@@ -53,7 +53,7 @@ def filter_medium(flowrate: float) -> float:
 def filter_high(flowrate: float) -> float:
     return trimf(flowrate, [36,48,60])
 
-# Output : Fan speed percentage
+'''Output : Fan speed percentage'''
 # Low
 def fan_low(fan: float) -> float:
     return trimf(fan, [0,25,50])
@@ -63,14 +63,3 @@ def fan_medium(fan: float) -> float:
 # High
 def fan_high(fan: float) -> float:
     return trimf(fan, [75,100,100])
-
-
-# def test_aqi(aqi):
-#     print(aqi_good(aqi))
-#     print(aqi_moderate(aqi))
-#     print(aqi_unhealthy_sensitive(aqi))
-#     print(aqi_unhealthy(aqi))
-#     print(aqi_very_unhealthy(aqi))
-#     print(aqi_hazardous(aqi))
-    
-# test_aqi(70)
