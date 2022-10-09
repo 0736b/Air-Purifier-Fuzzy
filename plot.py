@@ -72,6 +72,7 @@ def plot_membershipfn():
 def plot_output_graph(output_graph: dict, centroid: float):
     low_fan, medium_fan, high_fan = fan_fuzzy()
     centroid_label = 'Centroid = ' + str(round(centroid,4))
+    text_offset = len(centroid_label) / 3.5
     x = []
     y = []
     for _x, mem_val in output_graph.items():
@@ -79,12 +80,14 @@ def plot_output_graph(output_graph: dict, centroid: float):
         y.append(float(mem_val))
     x = np.array(x)
     y = np.array(y)
-    plt.plot(x_fanspeed, low_fan, linewidth=1.5, label='Low')
-    plt.plot(x_fanspeed, medium_fan, linewidth=1.5, label='Medium')
-    plt.plot(x_fanspeed, high_fan, linewidth=1.5, label='High')
-    plt.fill_between(x, 0, y, where=y>0, interpolate=True, zorder=5)
-    plt.plot([centroid, centroid], [-0.05,1.05], 'r--', lw=3, zorder=10, label='Centroid')
-    plt.text(centroid + 1,0.5,centroid_label)
+    plt.plot(x_fanspeed, low_fan, linewidth=3, label='Low', zorder=10)
+    plt.plot(x_fanspeed, medium_fan, linewidth=3, label='Medium', zorder=10)
+    plt.plot(x_fanspeed, high_fan, linewidth=3, label='High', zorder=10)
+    plt.fill_between(x, 0, y, where=y>0, interpolate=True, color='0.35', zorder=5)
+    plt.plot([centroid, centroid], [-0.05,1.05], 'r--', lw=3, zorder=15, label='Centroid')
+    props = dict(boxstyle='round', facecolor='white', alpha=1)
+    plt.text((centroid - text_offset),-0.05, centroid_label, bbox=props ,zorder=20)
+    plt.suptitle('Fan Speed Percentage')
     plt.legend()
     plt.show()
         
