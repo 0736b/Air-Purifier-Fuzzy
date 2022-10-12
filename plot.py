@@ -91,7 +91,37 @@ def plot_output_graph(output_graph: dict, centroid: float):
     plt.legend()
     plt.show()
         
-
+def plot_rules(log_rules: dict, aqi: float, flowrate: float):
+    good, moderate, unhealthy_sens, unhealthy, very_unhealthy, hazardous = aqi_fuzzy()
+    low_fr, medium_fr, high_fr = flowrate_fuzzy()
+    low_fan, medium_fan, high_fan = fan_fuzzy()
+    
+    fig, (ax0, ax1, ax2) = plt.subplots(1,3)
+    fig.suptitle('Log rules')
+ # ax0 is aqi plot
+    ax0.plot(x_aqi, good, 'r', linewidth=2.5, label='Good', zorder=0)
+    ax0.plot(x_aqi, moderate, color='0.75', linewidth=2.5, label='Moderate')
+    ax0.plot(x_aqi, unhealthy_sens, color='0.75', linewidth=2.5, label='Unhealthy for sensitive group')
+    ax0.plot(x_aqi, unhealthy, color='0.75', linewidth=2.5, label='Unhealthy')
+    ax0.plot(x_aqi, very_unhealthy, color='0.75', linewidth=2.5, label='Very unhealthy')
+    ax0.plot(x_aqi, hazardous, color='0.75', linewidth=2.5, label='Hazardous')
+    ax0.set_title('Air Quality Index (AQI)')
+    ax0.legend()
+    # ax1 is flowrate plot
+    ax1.plot(x_flowrate, low_fr, 'r', linewidth=2.5, label='Low', zorder=0)
+    ax1.plot(x_flowrate, medium_fr, color='0.75', linewidth=2.5, label='Medium')
+    ax1.plot(x_flowrate, high_fr, color='0.75', linewidth=2.5, label='High')
+    ax1.set_title('Air Filter Flowrate')
+    ax1.legend()
+    # ax2 is fanspeed plot
+    ax2.plot(x_fanspeed, low_fan, 'r', linewidth=2.5, label='Low', zorder=0)
+    ax2.plot(x_fanspeed, medium_fan, color='0.75', linewidth=2.5, label='Medium')
+    ax2.plot(x_fanspeed, high_fan, color='0.75', linewidth=2.5, label='High')
+    ax2.set_title('Fan Speed Percentage')
+    ax2.legend()
+    plt.show()
+    
+    
 
 
 if __name__ == '__main__':

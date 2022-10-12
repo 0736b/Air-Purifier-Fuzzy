@@ -30,6 +30,7 @@ FAN_HIGH = [10,13,14,16,17,18]      # Numbers of rule that output FAN is HIGH
 
 def find_alphacut_from_inputs(fc_aqi: dict, fc_flowrate: dict):
     '''evaluate all rules from inputs'''
+    log_rules = {}
     rules_alphacut = {}
     rules_alphacut['1'] = np.fmin(fc_aqi['GOOD'], fc_flowrate['LOW'])
     rules_alphacut['2'] = np.fmin(fc_aqi['GOOD'], fc_flowrate['MEDIUM'])
@@ -49,7 +50,26 @@ def find_alphacut_from_inputs(fc_aqi: dict, fc_flowrate: dict):
     rules_alphacut['16'] = np.fmin(fc_aqi['HAZARDOUS'], fc_flowrate['LOW'])
     rules_alphacut['17'] = np.fmin(fc_aqi['HAZARDOUS'], fc_flowrate['MEDIUM'])
     rules_alphacut['18'] = np.fmin(fc_aqi['HAZARDOUS'], fc_flowrate['HIGH'])
-    return rules_alphacut
+    log_rules['1'] = [fc_aqi['GOOD'], fc_flowrate['LOW']]
+    log_rules['2'] = [fc_aqi['GOOD'], fc_flowrate['MEDIUM']]
+    log_rules['3'] = [fc_aqi['GOOD'], fc_flowrate['HIGH']]
+    log_rules['4'] = [fc_aqi['MODERATE'], fc_flowrate['LOW']]
+    log_rules['5'] = [fc_aqi['MODERATE'], fc_flowrate['MEDIUM']]
+    log_rules['6'] = [fc_aqi['MODERATE'], fc_flowrate['HIGH']]
+    log_rules['7'] = [fc_aqi['UNHEALTHY_SENSITIVE'], fc_flowrate['LOW']]
+    log_rules['8'] = [fc_aqi['UNHEALTHY_SENSITIVE'], fc_flowrate['MEDIUM']]
+    log_rules['9'] = [fc_aqi['UNHEALTHY_SENSITIVE'], fc_flowrate['HIGH']]
+    log_rules['10'] = [fc_aqi['UNHEALTHY'], fc_flowrate['LOW']]
+    log_rules['11'] = [fc_aqi['UNHEALTHY'], fc_flowrate['MEDIUM']]
+    log_rules['12'] = [fc_aqi['UNHEALTHY'], fc_flowrate['HIGH']]
+    log_rules['13'] = [fc_aqi['VERY_UNHEALTHY'], fc_flowrate['LOW']]
+    log_rules['14'] = [fc_aqi['VERY_UNHEALTHY'], fc_flowrate['MEDIUM']]
+    log_rules['15'] = [fc_aqi['VERY_UNHEALTHY'], fc_flowrate['HIGH']]
+    log_rules['16'] = [fc_aqi['HAZARDOUS'], fc_flowrate['LOW']]
+    log_rules['17'] = [fc_aqi['HAZARDOUS'], fc_flowrate['MEDIUM']]
+    log_rules['18'] = [fc_aqi['HAZARDOUS'], fc_flowrate['HIGH']]
+    print(log_rules)
+    return rules_alphacut, log_rules
 
 def alphacut_for_output(rules):
     '''find alphacut from union graph in same Output fuzzy set'''
@@ -97,8 +117,8 @@ def union_graph_alphacut(low_alpha, medium_alpha, high_alpha):
         
 def inference(fc_aqi: dict, fc_flowrate: dict) -> list[float]:
     '''fuzzy inference'''
-    alpha_from_inputs = find_alphacut_from_inputs(fc_aqi, fc_flowrate)
+    alpha_from_inputs, log_rules = find_alphacut_from_inputs(fc_aqi, fc_flowrate)
     output_low_alphacut, output_medium_alphacut, output_high_alphacut = alphacut_for_output(alpha_from_inputs)
     output_graph = union_graph_alphacut(output_low_alphacut, output_medium_alphacut, output_high_alphacut)
     output_val = centroid(output_graph)
-    return output_val, output_graph
+    return output_val, output_graph, log_rules
