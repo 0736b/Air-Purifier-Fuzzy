@@ -84,7 +84,7 @@ def plot_output_graph(output_graph: dict, centroid: float):
     plt.plot(x_fanspeed, medium_fan, linewidth=3, label='Medium', zorder=10)
     plt.plot(x_fanspeed, high_fan, linewidth=3, label='High', zorder=10)
     plt.fill_between(x, 0, y, where=y>0, interpolate=True, color='0.35', zorder=5)
-    plt.plot([centroid, centroid], [-0.05,1.05], 'r--', lw=3, zorder=15, label='Centroid')
+    plt.plot([centroid, centroid], [-0.05,1.05], 'r--', lw=3, zorder=15, label='Centroid', clip_on=False)
     props = dict(boxstyle='round', facecolor='white', alpha=1)
     plt.text((centroid - text_offset),-0.05, centroid_label, bbox=props ,zorder=20)
     plt.suptitle('Fan Speed Percentage')
