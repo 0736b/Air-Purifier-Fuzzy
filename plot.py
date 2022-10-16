@@ -118,7 +118,7 @@ def plot_rules(log_rules: dict, aqi: float, flowrate: float):
                 ax.plot(x_aqi, hazardous, color=get_color('aqi',r_num,6), linewidth=2.5, label=get_label('aqi',r_num,6), zorder=get_z('aqi', r_num, 6))
                 ax.axvline(x = aqi, ymax=log_rules[str(r_num)][0], color='b', linewidth=2.5, zorder=50)
                 ax.axhline(y = log_rules[str(r_num)][0], color = 'b', linewidth=2.5, xmin=0, xmax=aqi/500.0, zorder=50)
-                ax.axhline(y = log_rules[str(r_num)][0], color = 'b', linewidth=2.5, xmin=aqi/500.0, linestyle='--',zorder=50)
+                ax.axhline(y = log_rules[str(r_num)][0], color = 'b', linewidth=2.5, xmin=aqi/500.0, linestyle='--',zorder=70)
                 if isFirst:
                     ax.set_title('Air Quality Index (AQI)')
                 rule = 'Rule ' + str(r_num) + ': ' + rules_str[str(r_num)]
@@ -130,8 +130,8 @@ def plot_rules(log_rules: dict, aqi: float, flowrate: float):
                 ax.plot(x_flowrate, medium_fr, color=get_color('flowrate',r_num,2), linewidth=2.5, label=get_label('flowrate', r_num, 2), zorder=get_z('flowrate', r_num, 2))
                 ax.plot(x_flowrate, high_fr, color=get_color('flowrate',r_num,3), linewidth=2.5, label=get_label('flowrate', r_num, 3), zorder=get_z('flowrate', r_num, 3))
                 ax.axvline(x = flowrate, ymax=log_rules[str(r_num)][1], color = 'b', linewidth=2.5, zorder=50)
-                ax.axhline(y = log_rules[str(r_num)][1], color = 'b', xmin=0, xmax=flowrate/60.0, linewidth=2.5, zorder=50)
-                ax.axhline(y = log_rules[str(r_num)][1], color = 'b', xmin=flowrate/60.0, linewidth=2.5, linestyle='--', zorder=50)
+                ax.axhline(y = log_rules[str(r_num)][1], color = 'b', xmin=0, xmax=flowrate/100.0, linewidth=2.5, zorder=50)
+                ax.axhline(y = log_rules[str(r_num)][1], color = 'b', xmin=flowrate/100.0, linewidth=2.5, linestyle='--', zorder=70)
                 if isFirst:
                     ax.set_title('Air Filter Flowrate')
                 ax.legend(loc='upper right')
@@ -152,9 +152,5 @@ def plot_rules(log_rules: dict, aqi: float, flowrate: float):
                 isFirst = False 
         plt.show()        
     
-    
-
-
 if __name__ == '__main__':
     plot_membershipfn()
-    # plot_rules()

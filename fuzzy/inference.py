@@ -50,6 +50,7 @@ def find_alphacut_from_inputs(fc_aqi: dict, fc_flowrate: dict):
     rules_alphacut['16'] = np.fmin(fc_aqi['HAZARDOUS'], fc_flowrate['LOW'])
     rules_alphacut['17'] = np.fmin(fc_aqi['HAZARDOUS'], fc_flowrate['MEDIUM'])
     rules_alphacut['18'] = np.fmin(fc_aqi['HAZARDOUS'], fc_flowrate['HIGH'])
+    # for graph plotting
     log_rules['1'] = [fc_aqi['GOOD'], fc_flowrate['LOW']]
     log_rules['2'] = [fc_aqi['GOOD'], fc_flowrate['MEDIUM']]
     log_rules['3'] = [fc_aqi['GOOD'], fc_flowrate['HIGH']]
@@ -68,7 +69,6 @@ def find_alphacut_from_inputs(fc_aqi: dict, fc_flowrate: dict):
     log_rules['16'] = [fc_aqi['HAZARDOUS'], fc_flowrate['LOW']]
     log_rules['17'] = [fc_aqi['HAZARDOUS'], fc_flowrate['MEDIUM']]
     log_rules['18'] = [fc_aqi['HAZARDOUS'], fc_flowrate['HIGH']]
-    print(log_rules)
     return rules_alphacut, log_rules
 
 def alphacut_for_output(rules):
