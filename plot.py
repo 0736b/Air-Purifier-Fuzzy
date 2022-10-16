@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from fuzzy.membership import *
-from utils.plot_util import get_label, get_color
+from utils.plot_util import get_label, get_color, get_z, rules_str, fill_fan
 
 def aqi_fuzzy():
     good = []
@@ -99,47 +99,58 @@ def plot_rules(log_rules: dict, aqi: float, flowrate: float):
     x = [i for i in range(0,100)]
     y = [aqi for i in range(0,100)]
     # create subplots
-    fig, axs = plt.subplots(nrows=6, ncols=3)
-    plt.subplots_adjust(hspace=0.5)
-    fig.suptitle("Rules inference")
+    # fig.suptitle("Rules Inference")
     # graph settings
     col = 0
     r_num = 1
+    isFirst = True
     # loop
-    for ax in axs.reshape(-1):
-        if col == 0:
-            ax.plot(x_aqi, good, color=get_color('aqi', r_num, 1), linewidth=2.5, label=get_label('aqi',r_num,1))
-            ax.plot(x_aqi, moderate, color=get_color('aqi',r_num,2), linewidth=2.5, label=get_label('aqi',r_num,2))
-            ax.plot(x_aqi, unhealthy_sens, color=get_color('aqi',r_num,3), linewidth=2.5, label=get_label('aqi',r_num,3))
-            ax.plot(x_aqi, unhealthy, color=get_color('aqi',r_num,4), linewidth=2.5, label=get_label('aqi',r_num,4))
-            ax.plot(x_aqi, very_unhealthy, color=get_color('aqi',r_num,5), linewidth=2.5, label=get_label('aqi',r_num,5))
-            ax.plot(x_aqi, hazardous, color=get_color('aqi',r_num,6), linewidth=2.5, label=get_label('aqi',r_num,6))
-            ax.axvline(x = aqi, ymax=log_rules[str(r_num)][0], color='b', linewidth=2.5)
-            ax.axhline(y = log_rules[str(r_num)][0], color = 'b', linewidth=2.5, xmin=0, xmax=aqi/500.0)
-            ax.axhline(y = log_rules[str(r_num)][0], color = 'b', linewidth=2.5, xmin=aqi/500.0, linestyle='--')
-            ax.set_title('Air Quality Index (AQI)')
-            ax.legend()
-            col += 1
-        elif col == 1:
-            ax.plot(x_flowrate, low_fr, color=get_color('flowrate',r_num,1), linewidth=2.5, label=get_label('flowrate', r_num, 1))
-            ax.plot(x_flowrate, medium_fr, color=get_color('flowrate',r_num,2), linewidth=2.5, label=get_label('flowrate', r_num, 2))
-            ax.plot(x_flowrate, high_fr, color=get_color('flowrate',r_num,3), linewidth=2.5, label=get_label('flowrate', r_num, 3))
-            ax.axvline(x = flowrate, ymax=log_rules[str(r_num)][1], color = 'b', linewidth=2.5)
-            ax.axhline(y = log_rules[str(r_num)][1], color = 'b', xmin=0, xmax=flowrate/60.0, linewidth=2.5)
-            ax.axhline(y = log_rules[str(r_num)][1], color = 'b', xmin=flowrate/60.0, linewidth=2.5, linestyle='--')
-            ax.set_title('Air Filter Flowrate')
-            ax.legend()
-            col += 1
-        elif col == 2:
-            ax.plot(x_fanspeed, low_fan, color=get_color('fan', r_num, 1), linewidth=2.5, label=get_label('fan', r_num, 1))
-            ax.plot(x_fanspeed, medium_fan, color=get_color('fan', r_num, 2), linewidth=2.5, label=get_label('fan', r_num, 2))
-            ax.plot(x_fanspeed, high_fan, color=get_color('fan', r_num, 3), linewidth=2.5, label=get_label('fan', r_num, 3))
-            ax.axhline(y = min(log_rules[str(r_num)][0], log_rules[str(r_num)][1]), color = 'b', linewidth=2.5, linestyle='--')
-            ax.set_title('Fan Speed Percentage')
-            ax.legend()
-            r_num += 1
-            col = 0 
-    plt.show()        
+    for i in range(0,3):
+        fig, axs = plt.subplots(nrows=6, ncols=3)
+        plt.subplots_adjust(hspace=0.65, left=0.125, bottom=0.055, right=0.9, top=0.971, wspace=0.2)
+        for ax in axs.reshape(-1):
+            if col == 0:
+                ax.plot(x_aqi, good, color=get_color('aqi',r_num,1), linewidth=2.5, label=get_label('aqi',r_num,1), zorder=get_z('aqi', r_num, 1))
+                ax.plot(x_aqi, moderate, color=get_color('aqi',r_num,2), linewidth=2.5, label=get_label('aqi',r_num,2), zorder=get_z('aqi', r_num, 2))
+                ax.plot(x_aqi, unhealthy_sens, color=get_color('aqi',r_num,3), linewidth=2.5, label=get_label('aqi',r_num,3), zorder=get_z('aqi', r_num, 3))
+                ax.plot(x_aqi, unhealthy, color=get_color('aqi',r_num,4), linewidth=2.5, label=get_label('aqi',r_num,4), zorder=get_z('aqi', r_num, 4))
+                ax.plot(x_aqi, very_unhealthy, color=get_color('aqi',r_num,5), linewidth=2.5, label=get_label('aqi',r_num,5), zorder=get_z('aqi', r_num, 5))
+                ax.plot(x_aqi, hazardous, color=get_color('aqi',r_num,6), linewidth=2.5, label=get_label('aqi',r_num,6), zorder=get_z('aqi', r_num, 6))
+                ax.axvline(x = aqi, ymax=log_rules[str(r_num)][0], color='b', linewidth=2.5, zorder=50)
+                ax.axhline(y = log_rules[str(r_num)][0], color = 'b', linewidth=2.5, xmin=0, xmax=aqi/500.0, zorder=50)
+                ax.axhline(y = log_rules[str(r_num)][0], color = 'b', linewidth=2.5, xmin=aqi/500.0, linestyle='--',zorder=50)
+                if isFirst:
+                    ax.set_title('Air Quality Index (AQI)')
+                rule = 'Rule ' + str(r_num) + ': ' + rules_str[str(r_num)]
+                ax.text(-25, -0.55, rule, color='red',fontsize=10)
+                ax.legend(loc='upper right')
+                col += 1
+            elif col == 1:
+                ax.plot(x_flowrate, low_fr, color=get_color('flowrate',r_num,1), linewidth=2.5, label=get_label('flowrate', r_num, 1), zorder=get_z('flowrate', r_num, 1))
+                ax.plot(x_flowrate, medium_fr, color=get_color('flowrate',r_num,2), linewidth=2.5, label=get_label('flowrate', r_num, 2), zorder=get_z('flowrate', r_num, 2))
+                ax.plot(x_flowrate, high_fr, color=get_color('flowrate',r_num,3), linewidth=2.5, label=get_label('flowrate', r_num, 3), zorder=get_z('flowrate', r_num, 3))
+                ax.axvline(x = flowrate, ymax=log_rules[str(r_num)][1], color = 'b', linewidth=2.5, zorder=50)
+                ax.axhline(y = log_rules[str(r_num)][1], color = 'b', xmin=0, xmax=flowrate/60.0, linewidth=2.5, zorder=50)
+                ax.axhline(y = log_rules[str(r_num)][1], color = 'b', xmin=flowrate/60.0, linewidth=2.5, linestyle='--', zorder=50)
+                if isFirst:
+                    ax.set_title('Air Filter Flowrate')
+                ax.legend(loc='upper right')
+                col += 1
+            elif col == 2:
+                ax.plot(x_fanspeed, low_fan, color=get_color('fan', r_num, 1), linewidth=2.5, label=get_label('fan', r_num, 1), zorder=get_z('fan', r_num, 1))
+                ax.plot(x_fanspeed, medium_fan, color=get_color('fan', r_num, 2), linewidth=2.5, label=get_label('fan', r_num, 2), zorder=get_z('fan', r_num, 2))
+                ax.plot(x_fanspeed, high_fan, color=get_color('fan', r_num, 3), linewidth=2.5, label=get_label('fan', r_num, 3), zorder=get_z('fan', r_num, 3))
+                min_r = min(log_rules[str(r_num)][0], log_rules[str(r_num)][1])
+                ax.axhline(y = min_r, color = 'b', linewidth=2.5, linestyle='--', zorder=50)
+                x,y = fill_fan(r_num, min_r)
+                ax.fill_between(x, 0, y, where=y>0, interpolate=True, color='0.35', zorder=5)
+                if isFirst:
+                    ax.set_title('Fan Speed Percentage')
+                ax.legend(loc='upper right')
+                r_num += 1
+                col = 0
+                isFirst = False 
+        plt.show()        
     
     
 

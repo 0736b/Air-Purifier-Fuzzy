@@ -62,4 +62,4 @@ def fan_medium(fan: float) -> float:
     return trimf(fan, [25,70,100])
 # High
 def fan_high(fan: float) -> float:
-    return trimf(fan, [75,100,100])
+    return trimf(fan, [75,100,101])
