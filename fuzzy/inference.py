@@ -1,6 +1,7 @@
 import numpy as np
 from fuzzy.defuzzifier import centroid
 from fuzzy.fuzzifier import gen_output_membership
+from utils.plot_util import FAN_LOW, FAN_MEDIUM, FAN_HIGH
 
 '''
 DEFINE RULES
@@ -23,10 +24,6 @@ DEFINE RULES
 17 - if AQI is HAZARDOUS and FILTER is MEDIUM then FAN is HIGH
 18 - if AQI is HAZARDOUS and FILTER is HIGH then FAN is HIGH
 '''
-
-FAN_LOW = [1,2,3,5,6]               # Numbers of rule that output FAN is LOW
-FAN_MEDIUM = [4,7,8,9,11,12,15]     # Numbers of rule that output FAN is MEDIUM
-FAN_HIGH = [10,13,14,16,17,18]      # Numbers of rule that output FAN is HIGH
 
 def find_alphacut_from_inputs(fc_aqi: dict, fc_flowrate: dict):
     '''evaluate all rules from inputs'''
