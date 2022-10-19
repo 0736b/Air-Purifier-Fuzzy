@@ -58,21 +58,21 @@ def plot_membershipfn():
     ax1.plot(x_flowrate, low_fr, linewidth=2.5, label='Low')
     ax1.plot(x_flowrate, medium_fr, linewidth=2.5, label='Medium')
     ax1.plot(x_flowrate, high_fr, linewidth=2.5, label='High')
-    ax1.set_title('Air Filter Flowrate')
+    ax1.set_title('Air Filter Flowrate (%)')
     ax1.legend()
     # ax2 is fanspeed plot
     ax2.plot(x_fanspeed, low_fan, linewidth=2.5, label='Low')
     ax2.plot(x_fanspeed, medium_fan, linewidth=2.5, label='Medium')
     ax2.plot(x_fanspeed, high_fan, linewidth=2.5, label='High')
-    ax2.set_title('Fan Speed Percentage')
+    ax2.set_title('Fan Speed (%)')
     ax2.legend()
     # adjust graph position
     plt.subplots_adjust(left=0.245,bottom=0.036,right=0.755,top=0.97,wspace=0.229,hspace=0.27)
     plt.show()
 
-def plot_output_graph(output_graph: dict, centroid: float):
+def plot_output_graph(output_graph: dict, centroid: float, aqi:float, flow:float):
     low_fan, medium_fan, high_fan = fan_fuzzy()
-    centroid_label = 'Centroid = ' + str(round(centroid,4))
+    centroid_label = 'Centroid = ' + str(round(centroid,4)) + '\nFan Speed = ' + str(int(centroid)) + '%'
     text_offset = len(centroid_label) / 3.5
     x = []
     y = []
@@ -87,8 +87,9 @@ def plot_output_graph(output_graph: dict, centroid: float):
     plt.fill_between(x, 0, y, where=y>0, interpolate=True, color='0.35', zorder=5)
     plt.plot([centroid, centroid], [-0.05,1.05], 'r--', lw=3, zorder=15, label='Centroid', clip_on=False)
     props = dict(boxstyle='round', facecolor='white', alpha=1)
-    plt.text((centroid - text_offset),-0.05, centroid_label, bbox=props ,zorder=20)
-    plt.suptitle('Fan Speed Percentage')
+    plt.text((centroid - text_offset),-0.1, centroid_label, bbox=props ,zorder=20)
+    title = 'Fan Speed Percentage\n' + 'AQI: ' + str(int(aqi)) +  ' Flowrate: ' +str(int(flow)) 
+    plt.suptitle(title)
     plt.legend()
     plt.show()
         

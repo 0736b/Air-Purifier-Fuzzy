@@ -152,5 +152,4 @@ def fill_fan(r_num: int, alpha: float):
             y.append(temp)
     x = np.array(x)
     y = np.array(y)
-    
     return x, y
